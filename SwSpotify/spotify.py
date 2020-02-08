@@ -66,7 +66,7 @@ def get_info_linux():
     # When this function is called and Spotify hasn't finished setting up the dbus properties, the artist field
     # is empty. This counts as if it weren't open because no data is loaded.
     try:
-        score = str(metadata['xesam:autoRating'][0])
+        score = str(metadata['xesam:autoRating'])
     except IndexError:
         raise SpotifyClosed from None
     try:
@@ -76,7 +76,6 @@ def get_info_linux():
     status = str(spotify_properties.Get("org.mpris.MediaPlayer2.Player", "PlaybackStatus"))
     if status.lower() != 'playing':
         raise SpotifyPaused
-
     return(track, artist, score)
 
 
@@ -151,3 +150,9 @@ def artist():
 
 def song():
     return current()[0]
+
+def score():
+    try:
+        return current()[2]
+    except IndexError:
+        return('Cannot get score')
